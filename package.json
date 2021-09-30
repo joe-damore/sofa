@@ -1,0 +1,11 @@
+{
+  "name": "sofa",
+  "version": "0.1.0",
+  "repository": "git@github.com:joe-damore/sofa.git",
+  "author": "Joe D'Amore <joe@joedamore.me>",
+  "scripts": {
+    "bootstrap": "node ./util/bootstrap"
+  },
+  "license": "MIT",
+  "private": true
+}
