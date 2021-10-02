@@ -1,0 +1,18 @@
+{
+  "name": "sofa-core",
+  "version": "0.1.0",
+  "description": "Sofa HTPC core",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx sofa-build -m develop --clean",
+    "build:dev": "npx sofa-build -m develop --clean",
+    "build:prod": "npx sofa-build -m production --clean"
+  },
+  "repository": "https://github.com/joe-damore/sofa",
+  "author": "Joe D'Amore <joe@joedamore.me>",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "sofa-build": "../../tools/sofa-build"
+  }
+}

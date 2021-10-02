@@ -1,0 +1,11 @@
+---
+meta:
+  name: 'sofa-core'
+  type: 'app'
+app:
+  friendlyName: 'Sofa'
+build:
+  src: ./src
+  dist: ./dist
+  types: ./types
+  backend: webpack
