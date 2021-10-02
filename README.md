@@ -21,4 +21,4 @@ This process can be expedited by running the following command in the root Sofa 
 $ yarn bootstrap
 ```
 
-This command may take a few minutes to execute. It is equivalent to executing `yarn install && yarn build` in each child Sofa project directory.
+The bootstrap command may take a few minutes to execute. It is equivalent to executing `yarn install && yarn build` in each child Sofa project directory.
