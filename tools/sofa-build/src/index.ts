@@ -8,8 +8,8 @@ import ProjectSummary from './project/project-summary';
 import BuildReporter from './builder/build-reporter';
 import BasicFormatter from './builder/formatters/basic-formatter';
 
-const name = process.env.npm_package_name || 'sofa-build';
-const version = process.env.npm_package_version || '0.0.0';
+const name = 'sofa-build';
+const version = '0.1.0';
 const program = new Command();
 
 program
