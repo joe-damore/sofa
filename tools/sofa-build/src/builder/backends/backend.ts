@@ -43,12 +43,19 @@ abstract class Backend {
    */
   public async clean() {
     const distDir = this.project.build.getDistPath();
+    const umdDistDir = this.project.build.getUmdDistPath();
     const typesDir = this.project.build.getTypesPath();
 
-    return Promise.all([
+    let cleanPromises = [
       del(distDir, { force: true }),
       del(typesDir, { force: true }),
-    ]);
+    ];
+
+    if (this.project.lib) {
+      cleanPromises.push(del(umdDistDir, { force: true }));
+    };
+
+    return Promise.all(cleanPromises);
   }
 }
 
