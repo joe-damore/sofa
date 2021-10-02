@@ -1,0 +1,12 @@
+---
+meta:
+  name: 'sofa-lib'
+  type: 'lib'
+lib:
+  objectName: 'sofaLib'
+build:
+  src: ./src
+  dist: ./lib
+  umdDist: ./_bundles
+  types: ./types
+  backend: webpack

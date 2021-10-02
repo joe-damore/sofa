@@ -1,0 +1,19 @@
+{
+  "name": "sofa-lib",
+  "version": "0.1.0",
+  "description": "Sofa core library",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "npx sofa-build -m develop --clean",
+    "build:dev": "npx sofa-build -m develop --clean",
+    "build:prod": "npx sofa-build -m production --clean"
+  },
+  "repository": "https://github.com/joe-damore/sofa",
+  "author": "Joe D'Amore <joe@joedamore.me>",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "sofa-build": "../../tools/sofa-build"
+  }
+}
