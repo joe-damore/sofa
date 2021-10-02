@@ -25,8 +25,6 @@ class ProjectSummary {
    * Displays project summary.
    */
   public display() {
-    console.log(`Project Info:`);
-    console.log('-------------');
     console.log(this.project.name);
     console.log(this.project.path);
     console.log('-------------');
@@ -37,11 +35,8 @@ class ProjectSummary {
     if (this.project.app) {
       console.log(`Friendly Name : ${this.project.app.friendlyName}`);
     }
-    console.log('-------------\n');
-    console.log(`Build Info:`);
-    console.log('-------------');
-    console.log(`Backend       : ${this.project.build.backend}`);
-    console.log(`Mode          : `);
+    console.log(`Build Backend : ${this.project.build.backend}`);
+    console.log(`Build Mode    : `);
   }
 }
 
