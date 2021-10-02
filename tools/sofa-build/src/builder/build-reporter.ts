@@ -31,6 +31,9 @@ class BuildReporter {
     this.formatter = formatter;
   }
 
+  /**
+   * Displays build report.
+   */
   public display() {
     this.formatter.display(this.results);
   }
