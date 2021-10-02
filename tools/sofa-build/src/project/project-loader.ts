@@ -52,6 +52,7 @@ class ProjectLoader {
    * @return {Project} Loaded project.
    */
   static loadFromFileSync(filepath: string): Project {
+    // TODO Catch file reading errors.
     const stringData = fs.readFileSync(filepath, 'utf8');
     const objectData: BuildFile = YAML.parse(stringData);
 
