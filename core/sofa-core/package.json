@@ -2,8 +2,9 @@
   "name": "sofa-core",
   "version": "0.1.0",
   "description": "Sofa HTPC core",
-  "main": "index.js",
+  "main": "dist/main/main.bundle.js",
   "scripts": {
+    "start": "electron .",
     "build": "npx sofa-build -m develop --clean",
     "build:dev": "npx sofa-build -m develop --clean",
     "build:prod": "npx sofa-build -m production --clean"
@@ -13,6 +14,7 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
+    "electron": "^15.1.0",
     "sofa-build": "../../tools/sofa-build"
   }
 }
