@@ -1,0 +1,16 @@
+---
+data:
+  db:
+    path: ./data/main.dat
+
+window:
+  fullscreen: true
+
+apps:
+  defaults:
+    boot: sofa-app-boot
+    home: sofa-app-home
+    launcher: sofa-app-launcher
+    login: sofa-app-login
+    splash: sofa-app-splash
+    upgrade: sofa-app-upgrade
