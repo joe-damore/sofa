@@ -3,6 +3,7 @@ import path from 'path';
 import JSON5 from 'json5';
 import webpack from 'webpack';
 import { promisify } from 'util';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 import BuildResults from '../build-results';
 import Project from '../../project/project';
@@ -204,16 +205,26 @@ class WebpackBackend extends Backend {
     }
     const app = this.project.app;
     return this.project.app.getRenderers().map((renderer: Renderer): Object => {
+
+      const mainEntry = {
+        'bundle': path.resolve(renderer.entrypoint),
+      }
+
+      const preloadEntry = (renderer.preload) ? {
+        'preload': path.resolve(renderer.path, 'preload.ts'),
+      } : {};
+
       return {
         target: 'electron-renderer',
         // TODO Allow this to vary depending on config.
         mode: 'development',
         entry: {
-          [renderer.name]: path.resolve(renderer.entrypoint),
+          ...mainEntry,
+          ...preloadEntry,
         },
         output: {
           path: path.resolve(this.project.build.getDistPath(), 'renderers', renderer.name),
-          filename: 'renderer.bundle.js',
+          filename: 'renderer.[name].js',
         },
         module: {
           rules: [
@@ -222,6 +233,9 @@ class WebpackBackend extends Backend {
             tsModule(this.project),
           ],
         },
+        plugins: [
+          new HtmlWebpackPlugin(),
+        ],
         resolve: {
           extensions: ['.ts', '.tsx'],
           alias: aliasesToWebpackAliases([

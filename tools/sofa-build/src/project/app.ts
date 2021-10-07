@@ -64,10 +64,12 @@ class App {
         const rendererName = dirname;
         const rendererPath = path.join(rendererDir, dirname);
         const rendererEntrypoint = path.join(rendererPath, 'index.tsx');
+        const rendererPreload = fs.existsSync(path.join(rendererPath, 'preload.ts'));
         return {
           name: rendererName,
           path: rendererPath,
           entrypoint: rendererEntrypoint,
+          preload: rendererPreload,
         };
       })
       .filter((renderer) => fs.existsSync(renderer.entrypoint));
