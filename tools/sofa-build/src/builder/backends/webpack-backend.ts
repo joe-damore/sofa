@@ -235,7 +235,10 @@ class WebpackBackend extends Backend {
           ],
         },
         plugins: [
-          new HtmlWebpackPlugin(),
+          new HtmlWebpackPlugin({
+            title: renderer.name,
+            template: path.resolve(__dirname, '..', '..', '..', 'templates', 'html', 'index.ejs'),
+          }),
         ],
         resolve: {
           extensions: ['.ts', '.tsx'],
