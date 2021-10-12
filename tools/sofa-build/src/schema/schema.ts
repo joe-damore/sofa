@@ -12,6 +12,7 @@ export interface App {
  */
 export interface Lib {
   objectName: string;
+  entrypoint: string;
 }
 
 /**
@@ -28,8 +29,10 @@ export interface Build {
   backend: string;
   src: string;
   dist: string;
+  libDist: string;
   umdDist: string;
   types: string;
+  mode: string;
 }
 
 /**
@@ -70,6 +73,9 @@ const schema: Schema = {
         objectName: {
           type: 'string',
         },
+        entrypoint: {
+          type: 'string',
+        },
       },
       required: [
         'objectName',
@@ -100,6 +106,9 @@ const schema: Schema = {
         dist: {
           type: 'string',
         },
+        libDist: {
+          type: 'string',
+        },
         umdDist: {
           type: 'string',
         },
@@ -109,6 +118,9 @@ const schema: Schema = {
         clean: {
           type: 'boolean'
         },
+        mode: {
+          type: 'string',
+        },
       },
       additionalProperties: false,
     },
@@ -116,7 +128,7 @@ const schema: Schema = {
   required: [
     'meta',
   ],
-  oneOf: [
+  anyOf: [
     {
       required: [
         'lib',

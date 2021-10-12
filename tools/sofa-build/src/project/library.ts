@@ -1,4 +1,4 @@
-import path from 'path';
+import nodePath from 'path'; // Imported as 'nodePath' to avoid confusion with 'path' class member.
 
 import Alias from './alias';
 import Build from './build';
@@ -25,6 +25,15 @@ class Library {
   public path: string;
 
   /**
+   * The path to the entrypoint for this library.
+   *
+   * This path is relative to the project path.
+   *
+   * @var string
+   */
+  public entrypoint: string = nodePath.join('.', 'src', 'index.ts');
+
+  /**
    * The build configuration information for this library.
    *
    * @var Build
@@ -37,10 +46,11 @@ class Library {
    * @param {string} objectName - Name of compiled library object.
    * @param {string} path - Path to project for library.
    */
-  constructor(objectName: string, path: string, build: Build) {
+  constructor(objectName: string, path: string, build: Build, entrypoint?: string) {
     this.objectName = objectName;
     this.path = path;
     this.build = build;
+    this.entrypoint = (entrypoint ? entrypoint : this.entrypoint);
   }
 
   /**
@@ -49,7 +59,7 @@ class Library {
    * @return {string} Path to library entrypoint.
    */
   public getEntrypointPath(): string {
-    const entrypoint = path.resolve(this.path, 'src', 'index.ts');
+    const entrypoint = nodePath.resolve(this.path, this.entrypoint);
     return entrypoint;
   }
 

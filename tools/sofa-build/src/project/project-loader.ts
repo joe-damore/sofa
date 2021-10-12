@@ -28,6 +28,7 @@ class ProjectLoader {
       build.backend = (data.build.backend ? data.build.backend : build.backend);
       build.srcPath = (data.build.src ? data.build.src : build.srcPath);
       build.distPath = (data.build.dist ? data.build.dist : build.distPath);
+      build.libDistPath = (data.build.libDist ? data.build.libDist : build.libDistPath);
       build.umdDistPath = (data.build.umdDist ? data.build.umdDist : build.umdDistPath);
       build.typesPath = (data.build.types ? data.build.types : build.typesPath);
     }
@@ -37,8 +38,9 @@ class ProjectLoader {
     if (data.app) {
       project.app = new App(data.app.friendlyName, path, build);
     }
-    else if (data.lib) {
-      project.lib = new Library(data.lib.objectName, path, build);
+    if (data.lib) {
+      const entrypoint = data.lib?.entrypoint;
+      project.lib = new Library(data.lib.objectName, path, build, entrypoint);
     }
 
     return project;

@@ -1,11 +1,14 @@
 ---
 meta:
-  name: 'sofa-core'
-  type: 'app'
+  name: sofa-core
 app:
-  friendlyName: 'Sofa'
+  friendlyName: Sofa
+lib:
+  objectName: sofaCore
+  entrypoint: ./src/core/index.ts
 build:
   src: ./src
   dist: ./dist
+  libDist: ./lib
   types: ./types
   backend: webpack

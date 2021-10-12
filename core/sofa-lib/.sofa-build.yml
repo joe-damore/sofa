@@ -6,7 +6,7 @@ lib:
   objectName: 'sofaLib'
 build:
   src: ./src
-  dist: ./lib
+  libDist: ./lib
   umdDist: ./_bundles
   types: ./types
   backend: webpack

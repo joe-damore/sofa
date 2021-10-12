@@ -21,6 +21,11 @@ class Build {
   public distPath: string = './dist';
 
   /**
+   * The path to the project dist for libraries, relative to the project path.
+   */
+  public libDistPath: string = './lib';
+
+  /**
    * The path to the project's UMD dist, relative to the project path.
    *
    * Only applicable for library projects.
@@ -54,12 +59,14 @@ class Build {
     backend?: string,
     srcPath?: string,
     distPath?: string,
+    libDistPath?: string,
     umdDistPath?: string,
     typesPath?: string) {
     this.path = path;
     this.backend = (backend ? backend : this.backend);
     this.srcPath = (srcPath ? srcPath : this.srcPath);
     this.distPath = (distPath ? distPath : this.distPath);
+    this.libDistPath = (libDistPath ? libDistPath : this.libDistPath);
     this.umdDistPath = (umdDistPath ? umdDistPath : this.umdDistPath);
     this.typesPath = (typesPath ? typesPath : this.typesPath);
   }
@@ -80,6 +87,15 @@ class Build {
    */
   public getDistPath(): string {
     return path.join(this.path, this.distPath);
+  }
+
+  /**
+   * Returns a path to the project library dist directory.
+   *
+   * @returns {string} Path to project library dist directory.
+   */
+  public getLibDistPath(): string {
+    return path.join(this.path, this.libDistPath);
   }
 
   /**

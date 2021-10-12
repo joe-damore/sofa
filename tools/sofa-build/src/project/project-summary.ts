@@ -25,10 +25,22 @@ class ProjectSummary {
    * Displays project summary.
    */
   public display() {
+    const projectType = (() => {
+      let types = [];
+
+      if (this.project.lib) {
+        types.push('Library');
+      }
+      if (this.project.app) {
+        types.push('App');
+      }
+      return types.join(', ');
+    })();
+
     console.log(this.project.name);
     console.log(this.project.path);
     console.log('-------------');
-    console.log(`Type          : ${this.project.getType()}`);
+    console.log(`Type          : ${projectType}`);
     if (this.project.lib) {
       console.log(`Lib Name      : ${this.project.lib.objectName}`);
     }

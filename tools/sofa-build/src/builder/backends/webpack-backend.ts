@@ -46,7 +46,7 @@ const aliasesToWebpackAliases = (aliases: Alias[]): Object => {
 };
 
 // Webpack TypeScript loading rule.
-const tsModule = (project: Project) => {
+const tsModule = (project: Project, entryDir: string) => {
   return {
     test: /\.tsx?$/,
     loader: 'ts-loader',
@@ -60,6 +60,7 @@ const tsModule = (project: Project) => {
       },
       context: path.resolve(project.path),
     },
+    include: [entryDir],
     exclude: /node_modules/,
   };
 };
@@ -111,7 +112,7 @@ class WebpackBackend extends Backend {
         rules: [
           scssModule,
           assetModule,
-          tsModule(this.project),
+          tsModule(this.project, path.dirname(this.project.lib.getEntrypointPath())),
         ],
       },
       resolve: {
@@ -140,7 +141,7 @@ class WebpackBackend extends Backend {
         ...baseConfig,
         output: {
           ...baseConfig.output,
-          path: path.resolve(this.project.build.getDistPath()),
+          path: path.resolve(this.project.build.getLibDistPath()),
           libraryTarget: 'commonjs2',
         },
       },
@@ -176,7 +177,7 @@ class WebpackBackend extends Backend {
         rules: [
           scssModule,
           assetModule,
-          tsModule(this.project),
+          tsModule(this.project, path.dirname(this.project.app.getEntrypointPath())),
         ],
       },
       resolve: {
@@ -230,7 +231,7 @@ class WebpackBackend extends Backend {
           rules: [
             scssModule,
             assetModule,
-            tsModule(this.project),
+            tsModule(this.project, path.dirname(path.resolve(renderer.entrypoint))),
           ],
         },
         plugins: [
@@ -254,11 +255,12 @@ class WebpackBackend extends Backend {
   }
 
   public getWebpackConfigs(): Object[] {
-    return [
+    const configs = [
       ...this.getLibConfigs(),
       ...this.getRendererAppConfigs(),
       ...this.getMainAppConfigs(),
     ];
+    return configs;
   }
 
   public async build(): Promise<BuildResults> {
