@@ -1,0 +1,9 @@
+{
+  "name": "eslint-config-sofa",
+  "version": "0.1.0",
+  "description": "ESLint configuration for Sofa projects",
+  "main": "src/index.js",
+  "author": "Joe D'Amore <joe@joedamore.me>",
+  "license": "MIT",
+  "private": true
+}
