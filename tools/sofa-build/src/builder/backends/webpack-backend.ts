@@ -5,6 +5,8 @@ import webpack from 'webpack';
 import { promisify } from 'util';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 
+import util from 'util';
+
 import BuildResults from '../build-results';
 import Project from '../../project/project';
 import Alias from '../../project/alias';
@@ -39,14 +41,36 @@ const assetModule = {
  * @returns {Object} Webpack alias object.
  */
 const aliasesToWebpackAliases = (aliases: Alias[]): Object => {
-  return aliases.reduce((cur: Alias, acc: any): any => {
+  type AliasMap = {
+    [key: string]: string;
+  }
+
+  return aliases.reduce((acc: AliasMap, cur: Alias): any => {
     acc[cur.alias] = cur.path;
     return acc;
-  });
+  }, {});
+};
+
+/**
+ * Converts an array of Alias instances to a TypeScript alias map.
+ *
+ * @param {Aliases[]} alias - Array of aliases.
+ *
+ * @returns {Object} TypeScript alias object.
+ */
+const aliasesToTypeScriptAliases = (aliases: Alias[]): Object => {
+  type AliasMap = {
+    [key: string]: string[];
+  }
+
+  return aliases.reduce((acc: AliasMap, cur: Alias): any => {
+    acc[`${cur.alias}/*`] = [path.join(cur.path, '*')];
+    return acc;
+  }, {});
 };
 
 // Webpack TypeScript loading rule.
-const tsModule = (project: Project, entryDir: string) => {
+const tsModule = (project: Project, entryDir: string, aliases?: Object) => {
   return {
     test: /\.tsx?$/,
     loader: 'ts-loader',
@@ -57,6 +81,8 @@ const tsModule = (project: Project, entryDir: string) => {
         declarationDir: project.build.getTypesPath(),
         // TODO Make this vary based on build mode.
         sourceMap: true,
+        baseUrl: path.resolve(project.path),
+        paths: aliases,
       },
       context: path.resolve(project.path),
     },
@@ -95,10 +121,13 @@ class WebpackBackend extends Backend {
       return [];
     }
 
+    const webpackAliases = aliasesToWebpackAliases(this.project.lib.getAliases());
+    const typescriptAliases = aliasesToTypeScriptAliases(this.project.lib.getAliases());
+
     const baseConfig = {
       target: 'node',
       // TODO Make build mode configurable.
-      mode: 'development',
+      mode: 'production',
       entry: {
         [this.project.name]: path.resolve(this.project.lib.getEntrypointPath()),
       },
@@ -112,12 +141,12 @@ class WebpackBackend extends Backend {
         rules: [
           scssModule,
           assetModule,
-          tsModule(this.project, path.dirname(this.project.lib.getEntrypointPath())),
+          tsModule(this.project, path.dirname(this.project.lib.getEntrypointPath()), typescriptAliases),
         ],
       },
       resolve: {
         extensions: ['.ts', '.tsx'],
-        alias: aliasesToWebpackAliases(this.project.lib.getAliases()),
+        alias: webpackAliases,
       },
       // TODO Make value vary depending on build mode.
       optimization: {
@@ -162,10 +191,13 @@ class WebpackBackend extends Backend {
       return [];
     }
 
+    const webpackAliases = aliasesToWebpackAliases(this.project.app.getAliases());
+    const typescriptAliases = aliasesToTypeScriptAliases(this.project.app.getAliases());
+
     return [{
       target: 'electron-main',
       // TODO Make build mode configurable.
-      mode: 'development',
+      mode: 'production',
       entry: {
         main: path.resolve(this.project.app.getEntrypointPath()),
       },
@@ -177,12 +209,12 @@ class WebpackBackend extends Backend {
         rules: [
           scssModule,
           assetModule,
-          tsModule(this.project, path.dirname(this.project.app.getEntrypointPath())),
+          tsModule(this.project, path.dirname(this.project.app.getEntrypointPath()), typescriptAliases),
         ],
       },
       resolve: {
         extensions: ['.ts', '.tsx'],
-        alias: aliasesToWebpackAliases(this.project.app.getAliases()),
+        alias: webpackAliases,
       },
       optimization: {
         // TODO Make this vary based on build mode.
@@ -215,10 +247,20 @@ class WebpackBackend extends Backend {
         'preload': path.resolve(renderer.path, 'preload.ts'),
       } : {};
 
+      const webpackAliases = aliasesToWebpackAliases([
+        ...app.getAliases(),
+        ...app.getRendererAliases(renderer.name),
+      ]);
+
+      const typescriptAliases = aliasesToTypeScriptAliases([
+        ...app.getAliases(),
+        ...app.getRendererAliases(renderer.name),
+      ]);
+
       return {
         target: 'electron-renderer',
         // TODO Allow this to vary depending on config.
-        mode: 'development',
+        mode: 'production',
         entry: {
           ...mainEntry,
           ...preloadEntry,
@@ -231,21 +273,19 @@ class WebpackBackend extends Backend {
           rules: [
             scssModule,
             assetModule,
-            tsModule(this.project, path.dirname(path.resolve(renderer.entrypoint))),
+            tsModule(this.project, path.dirname(path.resolve(renderer.entrypoint)), typescriptAliases),
           ],
         },
         plugins: [
           new HtmlWebpackPlugin({
             title: renderer.name,
             template: path.resolve(__dirname, '..', '..', '..', 'templates', 'html', 'index.ejs'),
+            inject: false,
           }),
         ],
         resolve: {
           extensions: ['.ts', '.tsx'],
-          alias: aliasesToWebpackAliases([
-            ...app.getAliases(),
-            ...app.getRendererAliases(renderer.name),
-          ]),
+          alias: webpackAliases,
         },
         optimization: {
           // TODO Allow this to vary based on build mode.
