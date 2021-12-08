@@ -209,7 +209,7 @@ class WebpackBackend extends Backend {
         rules: [
           scssModule,
           assetModule,
-          tsModule(this.project, path.dirname(this.project.app.getEntrypointPath()), typescriptAliases),
+          tsModule(this.project, path.join(this.project.path, 'src'), typescriptAliases),
         ],
       },
       resolve: {
