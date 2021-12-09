@@ -5,6 +5,7 @@
   "main": "dist/main/main.bundle.js",
   "scripts": {
     "start": "electron .",
+    "test": "npx jest ./src",
     "build": "npx sofa-build -m develop --clean",
     "build:dev": "npx sofa-build -m develop --clean",
     "build:prod": "npx sofa-build -m production --clean"
@@ -14,7 +15,21 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
+    "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.4",
+    "@babel/preset-typescript": "^7.16.0",
+    "@types/jest": "^27.0.3",
+    "babel-jest": "^27.4.2",
     "electron": "^15.1.0",
+    "jest": "^27.4.3",
     "sofa-build": "../../tools/sofa-build"
+  },
+  "dependencies": {
+    "fast-equals": "^2.0.4"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "^@src(.*)$": "<rootDir>/src$1"
+    }
   }
 }
